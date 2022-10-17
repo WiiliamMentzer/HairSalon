@@ -7,19 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace HairSalon.Controllers
 {
-  public class ClientController : Controller 
+  public class ClientsController : Controller 
   { 
 
     private readonly HairSalonContext _db;
 
-    public ClientController(HairSalonContext db) 
+    public ClientsController(HairSalonContext db) 
     {
       _db = db; 
     }
 
     public ActionResult Index()
     {
-      List<Client> model = _db.Clients.Include(client => client.Name).ToList(); 
+      List<Client> model = _db.Clients.Include(client => client.Stylist).ToList(); 
       return View(model);
     }
 
@@ -37,7 +37,7 @@ namespace HairSalon.Controllers
       return RedirectToAction("Index"); 
     }
 
-    public ActionResult Show(int id)
+    public ActionResult Details(int id)
     {
       Client thisClient = _db.Clients.FirstOrDefault(client => client.ClientId == id); 
       return View(thisClient);
@@ -46,7 +46,7 @@ namespace HairSalon.Controllers
     public ActionResult Edit(int id)
     {
       Client thisClient = _db.Clients.FirstOrDefault(client => client.ClientId == id);
-      ViewBag.StylistId = new SelectList(_db.Stylists, "StylistId", "StylistName");
+      ViewBag.StylistId = new SelectList(_db.Stylists, "StylistId", "Name");
       return View(thisClient);
     }
 
